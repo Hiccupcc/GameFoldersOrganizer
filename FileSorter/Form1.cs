@@ -52,7 +52,7 @@ namespace FileSorter
                 MessageBox.Show(FolderSelectedTwice);
                 LBL_Game.Text = "Selected Game Folder Will Show Here.";
                 LBL_Setups.Text = "Selected Setups Folder Will Show Here.";
-                SelectedSetup = "!";
+                SelectedSetup = "";
                 SetupSelected = false;
                 GameSelected = false; 
             }
