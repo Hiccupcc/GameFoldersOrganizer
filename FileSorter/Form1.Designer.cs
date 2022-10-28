@@ -109,6 +109,7 @@
             this.BTN_Org.TabIndex = 6;
             this.BTN_Org.Text = "Orgnaize Game Folder";
             this.BTN_Org.UseVisualStyleBackColor = true;
+            this.BTN_Org.Click += new System.EventHandler(this.BTN_Org_Click);
             // 
             // Form1
             // 

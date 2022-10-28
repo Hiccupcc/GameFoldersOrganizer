@@ -44,7 +44,7 @@ namespace FileSorter
             SetupSelected = true; 
             if (SetupSelected == true && GameSelected == true && Game.SelectedPath != Setup.SelectedPath)
             {
-                BTN_Org.Enabled = true;
+                    BTN_Org.Enabled = true;
             }
             else if (Game.SelectedPath == Setup.SelectedPath)
             {
@@ -61,11 +61,36 @@ namespace FileSorter
 
         }
 
+        private void BTN_Org_Click(object sender, EventArgs e)
+        {
+            try
+            {
 
-        //we want to show BTN_Org when both labels have been determined
-        //BTN_Org will move the setups folder present in the game folder to a new dedicated --
-        // --setups folder 
+                string[] SetupFolderKeywords = { "Setup", "FitGirl" };
+                DirectoryInfo SearchedDirectory = new DirectoryInfo(Game.SelectedPath);
+                FileSystemInfo[] filesAndDirs = SearchedDirectory.GetFileSystemInfos("*" + SetupFolderKeywords[0] + "*"); //<-- This Works
+                string[] roots = Directory.GetDirectories(Game.SelectedPath, "*", SearchOption.TopDirectoryOnly);
+                foreach (var item in roots)
+                { 
+                   string? FoundFolder = Path.GetFileNameWithoutExtension(item);
+                    if (FoundFolder.Contains(SetupFolderKeywords[0]))
+                    {
+                        MessageBox.Show(FoundFolder);
+                    }
+                    if (FoundFolder.Contains(SetupFolderKeywords[1]))
+                    {
+                        MessageBox.Show(FoundFolder);
+                    }
+
+                }
+
+            }
+            catch (IOException ExpMoveFolder)
+            {
+                MessageBox.Show(Convert.ToString(ExpMoveFolder));
+            }
 
 
+        }
     }
 }
