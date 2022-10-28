@@ -72,14 +72,15 @@ namespace FileSorter
                 string[] roots = Directory.GetDirectories(Game.SelectedPath, "*", SearchOption.TopDirectoryOnly);
                 foreach (var item in roots)
                 { 
-                   string? FoundFolder = Path.GetFileNameWithoutExtension(item);
+                   string? FoundFolder = Path.GetFullPath(item);
                     if (FoundFolder.Contains(SetupFolderKeywords[0]))
                     {
-                        MessageBox.Show(FoundFolder);
+                        Directory.Move(FoundFolder, Path.GetFullPath(Setup.SelectedPath) + @"\" + Path.GetFileName(FoundFolder));
                     }
                     if (FoundFolder.Contains(SetupFolderKeywords[1]))
                     {
-                        MessageBox.Show(FoundFolder);
+                       Directory.Move(FoundFolder, Path.GetFullPath(Setup.SelectedPath) + @"\" + Path.GetFileName(FoundFolder));
+
                     }
 
                 }
@@ -87,7 +88,7 @@ namespace FileSorter
             }
             catch (IOException ExpMoveFolder)
             {
-                MessageBox.Show(Convert.ToString(ExpMoveFolder));
+                MessageBox.Show(ExpMoveFolder.Message);
             }
 
 
