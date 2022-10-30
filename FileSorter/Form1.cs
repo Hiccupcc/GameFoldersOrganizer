@@ -65,10 +65,12 @@ namespace FileSorter
         {
             try
             {
-
+                //we want to move the game files from the root of the path of the game to its parent
+                //foreach item in GameContentsPath, File.Move Item to GameDirectory
                 string[] SetupFolderKeywords = { "Setup", "FitGirl" };
-                DirectoryInfo SearchedDirectory = new DirectoryInfo(Game.SelectedPath);
-                FileSystemInfo[] filesAndDirs = SearchedDirectory.GetFileSystemInfos("*" + SetupFolderKeywords[0] + "*"); //<-- This Works
+                DirectoryInfo GameDirectory = new DirectoryInfo(Game.SelectedPath);
+                string GameContentsPath = Game.SelectedPath + @"\" + GameDirectory.Name;
+                MessageBox.Show(GameContentsPath);
                 string[] roots = Directory.GetDirectories(Game.SelectedPath, "*", SearchOption.TopDirectoryOnly);
                 foreach (var item in roots)
                 { 
@@ -76,10 +78,20 @@ namespace FileSorter
                     if (FoundFolder.Contains(SetupFolderKeywords[0]))
                     {
                         Directory.Move(FoundFolder, Path.GetFullPath(Setup.SelectedPath) + @"\" + Path.GetFileName(FoundFolder));
+                        
                     }
                     if (FoundFolder.Contains(SetupFolderKeywords[1]))
                     {
                        Directory.Move(FoundFolder, Path.GetFullPath(Setup.SelectedPath) + @"\" + Path.GetFileName(FoundFolder));
+                       if (Directory.Exists(GameContentsPath))
+                        {
+                            string[] GameFiles = Directory.GetFiles(GameContentsPath);
+                            foreach (string GameFile in GameFiles)
+                            {
+                                File.Move(GameFile, Game.SelectedPath);
+                            }
+
+                         }
 
                     }
 
