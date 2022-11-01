@@ -1,8 +1,7 @@
 using System.Reflection.Emit;
-using System.IO; 
-
+using System.IO;
 namespace FileSorter
-{ 
+{
     public partial class Form1 : Form
     {
         public Form1()
@@ -11,8 +10,8 @@ namespace FileSorter
         }
         private bool GameSelected = false;
         private bool SetupSelected = false;
-        private string FolderSelectedTwice = "Please select two different folders."; 
-        
+        private string FolderSelectedTwice = "Please select two different folders.";
+
         private void BTN_Load_Click(object sender, EventArgs e)
         {
             Game.ShowDialog();
@@ -29,7 +28,7 @@ namespace FileSorter
                 MessageBox.Show(FolderSelectedTwice);
                 LBL_Game.Text = "Selected Game Folder Will Show Here.";
                 LBL_Setups.Text = "Selected Setups Folder Will Show Here.";
-                SelectedGame = "!"; 
+                SelectedGame = "!";
                 SetupSelected = false;
                 GameSelected = false;
             }
@@ -39,12 +38,12 @@ namespace FileSorter
         private void BTN_Setup_Click(object sender, EventArgs e)
         {
             Setup.ShowDialog();
-            string SelectedSetup = Setup.SelectedPath; 
+            string SelectedSetup = Setup.SelectedPath;
             LBL_Setups.Text = SelectedSetup;
-            SetupSelected = true; 
+            SetupSelected = true;
             if (SetupSelected == true && GameSelected == true && Game.SelectedPath != Setup.SelectedPath)
             {
-                    BTN_Org.Enabled = true;
+                BTN_Org.Enabled = true;
             }
             else if (Game.SelectedPath == Setup.SelectedPath)
             {
@@ -54,7 +53,7 @@ namespace FileSorter
                 LBL_Setups.Text = "Selected Setups Folder Will Show Here.";
                 SelectedSetup = "";
                 SetupSelected = false;
-                GameSelected = false; 
+                GameSelected = false;
             }
 
 
@@ -65,39 +64,22 @@ namespace FileSorter
         {
             try
             {
-                //we want to move the game files from the root of the path of the game to its parent
-                //foreach item in GameContentsPath, File.Move Item to GameDirectory
                 string[] SetupFolderKeywords = { "Setup", "FitGirl" };
-                DirectoryInfo GameDirectory = new DirectoryInfo(Game.SelectedPath);
-                string GameContentsPath = Game.SelectedPath + @"\" + GameDirectory.Name;
-                MessageBox.Show(GameContentsPath);
                 string[] roots = Directory.GetDirectories(Game.SelectedPath, "*", SearchOption.TopDirectoryOnly);
                 foreach (var item in roots)
-                { 
-                   string? FoundFolder = Path.GetFullPath(item);
-                    if (FoundFolder.Contains(SetupFolderKeywords[0]))
-                    {
-                        Directory.Move(FoundFolder, Path.GetFullPath(Setup.SelectedPath) + @"\" + Path.GetFileName(FoundFolder));
-                        
-                    }
+                {
+                    string? FoundFolder = Path.GetFullPath(item);
                     if (FoundFolder.Contains(SetupFolderKeywords[1]))
                     {
-                       Directory.Move(FoundFolder, Path.GetFullPath(Setup.SelectedPath) + @"\" + Path.GetFileName(FoundFolder));
-                       if (Directory.Exists(GameContentsPath))
-                        {
-                            string[] GameFiles = Directory.GetFiles(GameContentsPath);
-                            foreach (string GameFile in GameFiles)
-                            {
-                                File.Move(GameFile, Game.SelectedPath);
-                            }
-
-                         }
-
+                        CopyDeleteFolder();
                     }
-
+                    else if (FoundFolder.Contains(SetupFolderKeywords[0]))
+                    {
+                        CopyDeleteFolder();
+                    }
+                  
                 }
-
-            }
+             }
             catch (IOException ExpMoveFolder)
             {
                 MessageBox.Show(ExpMoveFolder.Message);
@@ -105,5 +87,34 @@ namespace FileSorter
 
 
         }
+
+        public void CopyDeleteFolder()
+        {
+            DirectoryInfo GameDirectory = new DirectoryInfo(Game.SelectedPath);
+            string GameContentsPath = Game.SelectedPath + @"\" + GameDirectory.Name;
+            string[] roots = Directory.GetDirectories(Game.SelectedPath, "*", SearchOption.TopDirectoryOnly);
+            foreach (var item in roots)
+            {
+                string? FoundFolder = Path.GetFullPath(item);
+                Directory.Move(FoundFolder, Path.GetFullPath(Setup.SelectedPath) + @"\" + Path.GetFileName(FoundFolder));
+                if (Directory.Exists(GameContentsPath))
+                {
+                    string[] GameFiles = Directory.GetFiles(GameContentsPath);
+                    foreach (string GameFile in GameFiles)
+                    {
+                        FileInfo CopyGameFile = new FileInfo(GameFile);
+                        if (new FileInfo(GameDirectory + @"\" + CopyGameFile.Name).Exists == false)
+                        {
+                            CopyGameFile.MoveTo(GameDirectory + @"\" + CopyGameFile.Name);
+                        }
+                    }
+                     Directory.Delete(GameContentsPath);
+
+                }
+
+            }
+
+        }
     }
+
 }
