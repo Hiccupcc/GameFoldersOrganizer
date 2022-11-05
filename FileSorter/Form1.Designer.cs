@@ -38,8 +38,10 @@
             this.PIC_Game = new System.Windows.Forms.PictureBox();
             this.LBL_Game = new System.Windows.Forms.Label();
             this.BTN_Org = new System.Windows.Forms.Button();
+            this.PIC_OpenSettings = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.PIC_Setup)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PIC_Game)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PIC_OpenSettings)).BeginInit();
             this.SuspendLayout();
             // 
             // BTN_Game
@@ -111,11 +113,23 @@
             this.BTN_Org.UseVisualStyleBackColor = true;
             this.BTN_Org.Click += new System.EventHandler(this.BTN_Org_Click);
             // 
+            // PIC_OpenSettings
+            // 
+            this.PIC_OpenSettings.Image = ((System.Drawing.Image)(resources.GetObject("PIC_OpenSettings.Image")));
+            this.PIC_OpenSettings.Location = new System.Drawing.Point(359, 3);
+            this.PIC_OpenSettings.Name = "PIC_OpenSettings";
+            this.PIC_OpenSettings.Size = new System.Drawing.Size(50, 50);
+            this.PIC_OpenSettings.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PIC_OpenSettings.TabIndex = 7;
+            this.PIC_OpenSettings.TabStop = false;
+            this.PIC_OpenSettings.Click += new System.EventHandler(this.PIC_OpenSettings_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(421, 300);
+            this.Controls.Add(this.PIC_OpenSettings);
             this.Controls.Add(this.BTN_Org);
             this.Controls.Add(this.LBL_Game);
             this.Controls.Add(this.PIC_Game);
@@ -128,6 +142,7 @@
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.PIC_Setup)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PIC_Game)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PIC_OpenSettings)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -144,5 +159,6 @@
         private PictureBox PIC_Game;
         private Label LBL_Game;
         private Button BTN_Org;
+        private PictureBox PIC_OpenSettings;
     }
 }
