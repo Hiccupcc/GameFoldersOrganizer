@@ -1,0 +1,2 @@
+﻿Ignore Setup pushes game content from child to parent
+Child Folder Name = Parent Folder Name
