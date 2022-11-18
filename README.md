@@ -1,9 +1,6 @@
 
-        <!-- Project Name and Description-->
         # GameFoldersManager
-        <!-- Brief Description -->
 Easily organize your game folders and remove unnecessary files.        
-    <!-- Features -->
     # Features
     
     - Organize all game folders in a directory automatically.
