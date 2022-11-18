@@ -12,7 +12,3 @@ Easily organize your game folders and remove unnecessary files.
     - Delete setup folders or move them to a selected destination. 
     - Move game files in a sub directory in the parent directory to avoid duplicate folders.
     
-    <!--Screenshots-->
-    ![Screenshot](https://imgur.com/DxNAXlQ)
-   
-    
