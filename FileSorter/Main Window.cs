@@ -19,7 +19,7 @@ namespace FileSorter
             string SelectedGame = Game.SelectedPath;
             LBL_Game.Text = SelectedGame;
             GameSelected = true;
-            if (SetupSelected == true && GameSelected == true && Game.SelectedPath != Setup.SelectedPath) // && Settings.SetupIgnored == false)
+            if (SetupSelected == true && GameSelected == true && Game.SelectedPath != Setup.SelectedPath)
             {
                 BTN_Org.Enabled = true;
             }
@@ -37,6 +37,7 @@ namespace FileSorter
                 SetupSelected = false;
                 GameSelected = false;
             }
+            
 
 
 
@@ -72,86 +73,23 @@ namespace FileSorter
                 foreach (var item in roots)
                 {
                     string? FoundFolder = Path.GetFullPath(item);
+                    DirectoryInfo MoveFullSetupPath = new DirectoryInfo(Setup.SelectedPath + FoundFolder);
                     if (FoundFolder.Contains(SetupFolderKeywords[1]))
                     {
-
-                        //CopyDeleteFolder();
-
+                        if (MoveFullSetupPath.Exists == false)
+                        {
+                            DirectoryInfo MoveSetup = new DirectoryInfo(FoundFolder);
+                            MoveSetup.MoveTo(Setup.SelectedPath + @"\" + MoveSetup.Name);
+                        }
                     }
-                    else if (FoundFolder.Contains(SetupFolderKeywords[0]))
-                    {
-                        // CopyDeleteFolder();
-                    }
-
                 }
+                MoveGameFiles();
             }
             else if (Settings.SetupIgnored == true)
             {
-                DirectoryInfo GameDirectory = new DirectoryInfo(Game.SelectedPath);
-                string GameContentsPath = Game.SelectedPath + @"\" + GameDirectory.Name;
-                DirectoryInfo DuplicateFolderCheck = new DirectoryInfo(GameContentsPath);
-                if (DuplicateFolderCheck.Exists)
-                {
-                    string[] GameFiles = Directory.GetFiles(GameContentsPath);
-                    foreach (string GameFile in GameFiles)
-                    {
-                         FileInfo CopyGameFile = new FileInfo(GameFile);
-                        if (new FileInfo(GameDirectory + @"\" + CopyGameFile.Name).Exists == false)
-                        {
-                            CopyGameFile.MoveTo(GameDirectory + @"\" + CopyGameFile.Name);
-                        }
-                    }
-                    string[] GameFolders = Directory.GetDirectories(GameContentsPath);
-                    foreach (string GameFolder in GameFolders)
-                    {
-                        DirectoryInfo CopyGameFolder = new DirectoryInfo(GameFolder);
-                        if (new DirectoryInfo(GameDirectory + @"\" + CopyGameFolder.Name).Exists == false)
-                        {
-                            if (!CopyGameFolder.Name.Contains(SetupFolderKeywords[0]) || !CopyGameFolder.Name.Contains(SetupFolderKeywords[1]))
-                            {
-                                CopyGameFolder.MoveTo(GameDirectory + @"\" + CopyGameFolder.Name);
-                            }
-                        }
-                    }
-                    Directory.Delete(GameContentsPath);
-                }
-                else if (!DuplicateFolderCheck.Exists)
-                {
-                    DirectoryInfo SelectedGamePath = new DirectoryInfo(Game.SelectedPath);
-                    string[] nonDuplicateDir = Directory.GetDirectories(Game.SelectedPath);
-                    foreach (string nonDuplicateDir1 in nonDuplicateDir)
-                    {
-                        string[] GameFiles = Directory.GetFiles(nonDuplicateDir1);
-                        foreach (string GameFile in GameFiles)
-                        {
-                            FileInfo CopyGameFile = new FileInfo(GameFile);
-                            if (new FileInfo(GameDirectory + @"\" + CopyGameFile.Name).Exists == false)
-                            {
-                                CopyGameFile.MoveTo(GameDirectory + @"\" + CopyGameFile.Name);
-                            }
-                        }
-                        string[] GameFolders = Directory.GetDirectories(nonDuplicateDir1);
-                        foreach (string GameFolder in GameFolders)
-                        {
-                            DirectoryInfo CopyGameFolder = new DirectoryInfo(GameFolder);
-                            if (new DirectoryInfo(GameDirectory + @"\" + CopyGameFolder.Name).Exists == false)
-                            {
-                                if (!CopyGameFolder.Name.Contains(SetupFolderKeywords[0]) || !CopyGameFolder.Name.Contains(SetupFolderKeywords[1]))
-                                {
-                                    CopyGameFolder.MoveTo(GameDirectory + @"\" + CopyGameFolder.Name);
-                                }
-                            }
-                        }
-                        Directory.Delete(nonDuplicateDir1);
-                    }
-                    
-                     
+                MoveGameFiles();
+            }
 
-
-                }
-            } 
-               
-            
         }
 
 
@@ -176,15 +114,72 @@ namespace FileSorter
             }
         }
 
-        public void SearchWholeFolder()
+        public void MoveGameFiles()
         {
-            //looks for duplicate game folders and moves them to parent folder 
-        }
-
-       
-
-
-
+            DirectoryInfo GameDirectory = new DirectoryInfo(Game.SelectedPath);
+            string GameContentsPath = Game.SelectedPath + @"\" + GameDirectory.Name;
+            DirectoryInfo DuplicateFolderCheck = new DirectoryInfo(GameContentsPath);
+            if (DuplicateFolderCheck.Exists)
+            {
+                string[] GameFiles = Directory.GetFiles(GameContentsPath);
+                foreach (string GameFile in GameFiles)
+                {
+                    FileInfo CopyGameFile = new FileInfo(GameFile);
+                    if (new FileInfo(GameDirectory + @"\" + CopyGameFile.Name).Exists == false)
+                    {
+                        CopyGameFile.MoveTo(GameDirectory + @"\" + CopyGameFile.Name);
+                    }
+                }
+                string[] GameFolders = Directory.GetDirectories(GameContentsPath);
+                foreach (string GameFolder in GameFolders)
+                {
+                    DirectoryInfo CopyGameFolder = new DirectoryInfo(GameFolder);
+                    if (new DirectoryInfo(GameDirectory + @"\" + CopyGameFolder.Name).Exists == false)
+                    {
+                        if (!CopyGameFolder.Name.Contains(SetupFolderKeywords[0]) || !CopyGameFolder.Name.Contains(SetupFolderKeywords[1]))
+                        {
+                            CopyGameFolder.MoveTo(GameDirectory + @"\" + CopyGameFolder.Name);
+                        }
+                    }
+                }
+                Directory.Delete(GameContentsPath);
+            }
+            else if (!DuplicateFolderCheck.Exists)
+            {
+                DirectoryInfo SelectedGamePath = new DirectoryInfo(Game.SelectedPath);
+                string[] nonDuplicateDir = Directory.GetDirectories(Game.SelectedPath);
+                foreach (string nonDuplicateDir1 in nonDuplicateDir)
+                {
+                    string[] GameFiles = Directory.GetFiles(nonDuplicateDir1);
+                    foreach (string GameFile in GameFiles)
+                    {
+                        FileInfo CopyGameFile = new FileInfo(GameFile);
+                        if (new FileInfo(GameDirectory + @"\" + CopyGameFile.Name).Exists == false)
+                        {
+                            CopyGameFile.MoveTo(GameDirectory + @"\" + CopyGameFile.Name);
+                        }
+                    }
+                    string[] GameFolders = Directory.GetDirectories(nonDuplicateDir1);
+                    foreach (string GameFolder in GameFolders)
+                    {
+                        DirectoryInfo CopyGameFolder = new DirectoryInfo(GameFolder);
+                        if (new DirectoryInfo(GameDirectory + @"\" + CopyGameFolder.Name).Exists == false)
+                        {
+                            if (!CopyGameFolder.Name.Contains(SetupFolderKeywords[0]) || !CopyGameFolder.Name.Contains(SetupFolderKeywords[1]))
+                            {
+                                CopyGameFolder.MoveTo(GameDirectory + @"\" + CopyGameFolder.Name);
+                            }
+                        }
+                    }
+                    Directory.Delete(nonDuplicateDir1);
+                }
+       }
     }
+
+
+
+
+
+}
 
 }
