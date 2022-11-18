@@ -1,5 +1,5 @@
 
-  # GameFoldersManager
+  # GameFoldersOrganizer
 Easily organize your game folders and remove unnecessary files.        
 
   # Features
